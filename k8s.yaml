@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
       - name: app
-        image: pathlight-app:1.0
-        imagePullPolicy: IfNotPresent
+        image: ghcr.io/dhanush614/pathlight-app:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 8000
 ---
