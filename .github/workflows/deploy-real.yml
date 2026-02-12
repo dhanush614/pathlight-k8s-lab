@@ -30,14 +30,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Update manifest image tag
-        shell: bash
+      - name: Update manifest image tag (PowerShell)
+        shell: powershell
         run: |
-          sed -i 's|ghcr.io/.*/pathlight-app:.*|ghcr.io/${{ github.repository_owner }}/pathlight-app:${{ github.sha }}|g' k8s.yaml
-          cat k8s.yaml
+          (Get-Content k8s.yaml) -replace 'image:\s*ghcr\.io/.*/pathlight-app:.*', 'image: ghcr.io/${{ github.repository_owner }}/pathlight-app:${{ github.sha }}' | Set-Content k8s.yaml
+          Get-Content k8s.yaml
 
-      - name: Apply to Kubernetes
-        shell: bash
+      - name: Apply to Kubernetes (PowerShell)
+        shell: powershell
         run: |
           kubectl apply -f k8s.yaml
           kubectl rollout status deployment/pathlight-app
