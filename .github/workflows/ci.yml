@@ -1,0 +1,23 @@
+name: CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+jobs:
+  build-and-smoke-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t pathlight-app:ci .
+
+      - name: Smoke test (container serves HTTP)
+        run: |
+          docker run -d --name test -p 8000:8000 pathlight-app:ci
+          sleep 2
+          curl -f http://localhost:8000
+          docker rm -f test
