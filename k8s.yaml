@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pathlight-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: pathlight
+  template:
+    metadata:
+      labels:
+        app: pathlight
+    spec:
+      containers:
+      - name: app
+        image: pathlight-app:1.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pathlight-svc
+spec:
+  selector:
+    app: pathlight
+  ports:
+  - port: 80
+    targetPort: 8000
+  type: NodePort
